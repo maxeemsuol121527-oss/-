@@ -1,0 +1,20 @@
+// Интерфейс распознавания
+abstract class IPlantRecognitionService {
+  Future<String> identifyPlant(String imagePath);
+}
+
+// Заглушка (Mock) для API
+class PlantIdService implements IPlantRecognitionService {
+  @override
+  Future<String> identifyPlant(String imagePath) async {
+    await Future.delayed(const Duration(seconds: 2)); // Симуляция сети
+    return "Monstera Deliciosa";
+  }
+}
+
+// IoT Интерфейс для будущих датчиков
+abstract class ISensorDevice {
+  Stream<double> getSoilMoisture();
+  Stream<double> getLightLevel();
+  Future<void> connect(String deviceId);
+}

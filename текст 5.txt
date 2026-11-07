@@ -1,0 +1,54 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+// Провайдер данных (в реальности берется из Firestore)
+final plantsProvider = StateProvider<List<Plant>>((ref) => []);
+
+class HomeScreen extends ConsumerWidget {
+  const HomeScreen({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final plants = ref.watch(plantsProvider);
+
+    return Scaffold(
+      backgroundColor: const Color(0xFFF1F8E9), // Пастельный зеленый
+      appBar: AppBar(
+        title: const Text('GreenCare', style: TextStyle(color: Colors.darkGreen)),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+      ),
+      body: plants.isEmpty
+          ? const Center(child: Text("Добавьте ваше первое растение"))
+          : ListView.builder(
+              padding: const EdgeInsets.all(16),
+              itemCount: plants.length,
+              itemBuilder: (context, index) => PlantCard(plant: plants[index]),
+            ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => _showAddPlantDialog(context),
+        backgroundColor: Colors.green[700],
+        child: const Icon(Icons.add_a_photo),
+      ),
+    );
+  }
+}
+
+class PlantCard extends StatelessWidget {
+  final Plant plant;
+  const PlantCard({required this.plant, super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+      margin: const EdgeInsets.only(bottom: 12),
+      child: ListTile(
+        leading: CircleAvatar(backgroundImage: NetworkImage(plant.imageUrl)),
+        title: Text(plant.name, style: const TextStyle(fontWeight: FontWeight.bold)),
+        subtitle: Text(plant.species),
+        trailing: const Icon(Icons.water_drop, color: Colors.blue),
+      ),
+    );
+  }
+}

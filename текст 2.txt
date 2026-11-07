@@ -1,0 +1,63 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+class Plant {
+  final String id;
+  final String name;
+  final String species;
+  final String imageUrl;
+  final int wateringIntervalDays; // Частота полива в днях
+  final String soilType;
+  final String lightLevel;
+  final DateTime lastWatered;
+  final List<GrowthRecord> growthHistory;
+
+  Plant({
+    required this.id,
+    required this.name,
+    required this.species,
+    required this.imageUrl,
+    required this.wateringIntervalDays,
+    required this.soilType,
+    required this.lightLevel,
+    required this.lastWatered,
+    this.growthHistory = const [],
+  });
+
+  Map<String, dynamic> toMap() => {
+    'name': name,
+    'species': species,
+    'imageUrl': imageUrl,
+    'wateringIntervalDays': wateringIntervalDays,
+    'soilType': soilType,
+    'lightLevel': lightLevel,
+    'lastWatered': Timestamp.fromDate(lastWatered),
+    'growthHistory': growthHistory.map((x) => x.toMap()).toList(),
+  };
+
+  factory Plant.fromMap(String id, Map<String, dynamic> map) => Plant(
+    id: id,
+    name: map['name'],
+    species: map['species'],
+    imageUrl: map['imageUrl'],
+    wateringIntervalDays: map['wateringIntervalDays'],
+    soilType: map['soilType'],
+    lightLevel: map['lightLevel'],
+    lastWatered: (map['lastWatered'] as Timestamp).toDate(),
+    growthHistory: (map['growthHistory'] as List?)
+            ?.map((x) => GrowthRecord.fromMap(x))
+            .toList() ?? [],
+  );
+}
+
+class GrowthRecord {
+  final String photoUrl;
+  final DateTime date;
+
+  GrowthRecord({required this.photoUrl, required this.date});
+
+  Map<String, dynamic> toMap() => {'photoUrl': photoUrl, 'date': Timestamp.fromDate(date)};
+  factory GrowthRecord.fromMap(Map<String, dynamic> map) => GrowthRecord(
+    photoUrl: map['photoUrl'],
+    date: (map['date'] as Timestamp).toDate(),
+  );
+}

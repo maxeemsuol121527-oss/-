@@ -1,0 +1,13 @@
+lib/
+  core/                # Общие ресурсы: темы, ошибки, роутинг, утилиты
+  shared/              # Общие виджеты и модели данных (Domain-level)
+  features/
+    home/              # Главный экран со списком растений
+      data/            # Репозитории и источники данных (Firebase)
+      domain/          # Сущности и Use Cases
+      presentation/    # Riverpod providers и UI (экраны, виджеты)
+    recognition/       # Модуль AI распознавания
+    diary/             # Дневник роста (таймлапс)
+    reminders/         # Логика уведомлений
+    iot_integration/   # Интерфейсы для датчиков
+  main.dart
